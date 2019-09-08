@@ -6,57 +6,52 @@
 plone.example.form
 ==================
 
-Tell me what your product does
+This is a Plone 5.2 test project to experiment with z3c forms. There are two forms in this project.
+The first one is the hallo world form. The second one is a pizza order form.
+The inspiration for the second one is from a plone tutorial site here: https://docs.plone.org/develop/addons/schema-driven-forms/creating-a-simple-form/creating-a-package.html. It has been adjusted to work on the Plone 5.2 version.
 
 Features
 --------
 
-- Can be bullet points
+- Hello world form
+- Pizza order form
 
 
 Examples
 --------
 
 This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
-
-
-Documentation
--------------
-
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
+- http://localhost:8080/Plone/@@hello_world_form for the Hello world form
+- http://localhost:8080/Plone/@@pizza_order_form for the Pizza order form
 
 
 Installation
 ------------
 
-Install plone.example.form by adding it to your buildout::
+This project is intedend for testint only. To install plone.example.form run the following::
 
-    [buildout]
+    $ git clone git@github.com:codehutlabs/plone.example.form.git
+    $ cd plone.example.form
+    $ plonecli build
+    $ plonecli serve
 
-    ...
+or::
 
-    eggs =
-        plone.example.form
+    $ git clone git@github.com:codehutlabs/plone.example.form.git
+    $ cd plone.example.form
+    $ virtualenv -p python3.7 .
+    $ ./bin/pip install -r requirements.txt
+    $ ./bin/buildout
+    $ ./bin/instance fg
 
-
-and then running ``bin/buildout``
+and then opening a browser at http://localhost:8080
 
 
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/plone.example.form/issues
-- Source Code: https://github.com/collective/plone.example.form
-- Documentation: https://docs.plone.org/foo/bar
+- Issue Tracker: https://github.com/codehutlabs/plone.example.form/issues
+- Source Code: https://github.com/codehutlabs/plone.example.form
 
 
 Support
