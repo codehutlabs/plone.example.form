@@ -38,3 +38,6 @@ reports/
 !.gitkeep
 !.travis.yml
 !src/plone
+
+.idea/
+.Python
