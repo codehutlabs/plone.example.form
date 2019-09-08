@@ -25,4 +25,13 @@
       class=".forms.hello_world_form.HelloWorldFormView"
       />
 
+    <adapter factory=".forms.pizza_order.PizzaOrderFormAdapter"/>
+
+    <browser:page
+        name="pizza_order_form"
+        for="*"
+        permission="zope2.View"
+        class=".forms.pizza_order.PizzaOrderForm"
+        />
+
 </configure>
