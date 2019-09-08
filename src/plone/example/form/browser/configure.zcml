@@ -18,4 +18,11 @@
       directory="static"
       />
 
+  <browser:page
+      name="hello_world_form"
+      for="*"
+      permission="zope2.View"
+      class=".forms.hello_world_form.HelloWorldFormView"
+      />
+
 </configure>
