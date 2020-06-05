@@ -14,6 +14,8 @@ class IPizzaOrderFormMarker(Interface):
 
 
 class IPizzaOrderForm(model.Schema):
+    # Check: https://docs.plone.org/develop/addons/schema-driven-forms/creating-a-simple-form/creating-a-schema.html
+    # and here: https://docs.plone.org/develop/addons/schema-driven-forms/customising-form-behaviour/fieldsets.html
 
     name = schema.TextLine(title=_(u"Your full name"), required=True)
 
