@@ -26,6 +26,8 @@ class PizzaOrderFormAdapter(object):
 
 class PizzaOrderForm(AutoExtensibleForm, form.Form):
 
+    enableCSRFProtection = True
+
     schema = IPizzaOrderForm
     form_name = "order_form"
 
@@ -65,8 +67,9 @@ class PizzaOrderForm(AutoExtensibleForm, form.Form):
             _(u"Thank you for your order. We will contact you shortly"), "info"
         )
 
-        contextURL = self.context.absolute_url()
-        self.request.response.redirect(contextURL)
+        context_url = self.context.absolute_url()
+        redirect_url = "{}/@@pizza_order_form".format(context_url)
+        self.request.response.redirect(redirect_url)
 
     @button.buttonAndHandler(_(u"Cancel"))
     def handleCancel(self, action):
