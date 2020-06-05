@@ -1,15 +1,23 @@
+from Acquisition import aq_inner
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.example.form.browser.forms.interfaces import IPizzaOrderForm
+from plone.formwidget.recaptcha.widget import ReCaptchaFieldWidget
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import form
+from z3c.form import group
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
 from zope.interface import Interface
 
+import logging
+
 
 _ = MessageFactory("hello_world")
+logger = logging.getLogger(__name__)
 
 
 @implementer(IPizzaOrderForm)
@@ -24,9 +32,10 @@ class PizzaOrderFormAdapter(object):
         self.orderItems = None
 
 
-class PizzaOrderForm(AutoExtensibleForm, form.Form):
+class PizzaOrderForm(AutoExtensibleForm, group.GroupForm, form.Form):
 
     enableCSRFProtection = True
+    enable_form_tabbing = False
 
     schema = IPizzaOrderForm
     form_name = "order_form"
@@ -41,6 +50,12 @@ class PizzaOrderForm(AutoExtensibleForm, form.Form):
         # call the base class version - this is very important!
         super(PizzaOrderForm, self).update()
 
+    # def updateWidgets(self):
+    #     self.fields["captcha"].widgetFactory = ReCaptchaFieldWidget
+    #
+    #     # call the base class version - this is very important!
+    #     super(PizzaOrderForm, self).updateWidgets()
+
     @button.buttonAndHandler(_(u"Order"))
     def handleApply(self, action):
         data, errors = self.extractData()
@@ -52,14 +67,35 @@ class PizzaOrderForm(AutoExtensibleForm, form.Form):
         # realistic action would be to send the order to another system, send
         # an email, or similar
 
-        print(u"Order received:")
-        print(u"  Customer: ", data["name"])
-        print(u"  Telephone:", data["telephone"])
-        print(u"  Address:  ", data["address1"])
-        print(u"            ", data["address2"])
-        print(u"            ", data["postcode"])
-        print(u"  Order:    ", ", ".join(data["orderItems"]))
-        print(u"")
+        captcha = getMultiAdapter(
+            (aq_inner(self.context), self.request), name="recaptcha"
+        )
+
+        if captcha.verify():
+            logger.info("ReCaptcha validation passed.")
+        else:
+            logger.info("The code you entered was wrong, please enter the new one.")
+
+        body = "Order received:\n"
+        body = "{}  Customer: {}\n".format(body, data["name"])
+        body = "{}  Phone:    {}\n".format(body, data["telephone"])
+        body = "{}  Address:  {}\n".format(body, data["address1"])
+        body = "{}            {}\n".format(body, data["address2"])
+        body = "{}            {}\n".format(body, data["postcode"])
+        body = "{}  Order:    {}\n".format(body, ", ".join(data["orderItems"]))
+
+        recipient = "info@plone.example.form"
+        sender = "plone@plone.example.form"
+        subject = "Order received"
+        immediate = True
+
+        api.portal.send_email(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            body=body,
+            immediate=immediate,
+        )
 
         # Redirect back to the front page with a status message
 
