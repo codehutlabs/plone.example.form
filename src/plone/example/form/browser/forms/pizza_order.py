@@ -67,9 +67,7 @@ class PizzaOrderForm(AutoExtensibleForm, group.GroupForm, form.Form):
         # realistic action would be to send the order to another system, send
         # an email, or similar
 
-        captcha = getMultiAdapter(
-            (aq_inner(self.context), self.request), name="recaptcha"
-        )
+        captcha = getMultiAdapter((aq_inner(self.context), self.request), name="recaptcha")
 
         if captcha.verify():
             logger.info("ReCaptcha validation passed.")
@@ -90,11 +88,7 @@ class PizzaOrderForm(AutoExtensibleForm, group.GroupForm, form.Form):
         immediate = True
 
         api.portal.send_email(
-            sender=sender,
-            recipient=recipient,
-            subject=subject,
-            body=body,
-            immediate=immediate,
+            sender=sender, recipient=recipient, subject=subject, body=body, immediate=immediate,
         )
 
         # Redirect back to the front page with a status message
