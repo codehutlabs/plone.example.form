@@ -98,7 +98,6 @@ class PizzaOrderForm(AutoExtensibleForm, group.GroupForm, form.Form):
         )
 
         # Redirect back to the front page with a status message
-
         IStatusMessage(self.request).addStatusMessage(
             _(u"Thank you for your order. We will contact you shortly"), "info"
         )
