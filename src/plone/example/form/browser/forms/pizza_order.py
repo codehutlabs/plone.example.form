@@ -15,7 +15,7 @@ from zope.interface import Interface
 import logging
 
 
-_ = MessageFactory("hello_world")
+_ = MessageFactory("plone.example.form")
 logger = logging.getLogger(__name__)
 
 
